@@ -1,0 +1,65 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>websocket</title>
+</head>
+<body>
+    　　<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+    var sock = null;
+
+     var wsuri = "ws://127.0.0.1:8888/wss?UserId=123456&token=123"; //本地的地址 是可以改变的哦
+
+    window.onload = function() {
+
+        sock = new WebSocket(wsuri);
+
+        //建立连接后触发
+        sock.onopen = function() {
+
+            console.log(" 建立连接后触发 connected to " + wsuri);
+        }
+        // 关闭连接时候触发
+        sock.onclose = function(e) {
+            console.log("关闭连接时候触发 connection closed (" + e.code + ")");
+        }
+        // 收到消息后触发
+        sock.onmessage = function(e) {
+            // console.log("收到消息后触发 message received: " + e.data);
+            a=JSON.parse(e.data);
+            console.log(a.Info)
+            $("#im").append("<hr><div><img src="+a.Info.Image+" style=\"width:50px;height:50px\">用户id:【"+a.Info.NickName +"】<br>时间："+a.TimeStamp+"<br>内容："+a.Content+"</div>")
+        }
+
+        //发生错误的时候触发
+        sock.onerror=function (e) {
+            console.log("发生错误时候触发"+wsuri)
+        }
+    };
+     //如果sock被关闭掉了 这里 也会报错的啊
+    function send() {
+
+        var msg = document.getElementById('message').value;
+        var packJson = {
+            "Content":msg,
+            "SendAccount":"123456",
+            "RecipientAccount":"1234567",
+            "MessageType":1,
+            };
+        // console.log(Json.stringify(packJson))
+        sock.send(JSON.stringify(packJson));
+    };
+
+</script>
+<h1>GoWebSocketDemo</h1>
+<form>
+    <p>
+        Message: <input id="message" type="text" value="Test">
+    </p>
+</form>
+<button onclick="send();">给服务器发送消息</button>
+    <div id="im">
+        <h1>内容</h1>
+    </div>
+</body>
+</html>

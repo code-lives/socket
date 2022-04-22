@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql #mysql 容器
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - $PWD/mysql/db/:/var/lib/mysql/
+      - $PWD/mysql/mysqld/:/var/run/mysqld/
+      - $PWD/mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+  redis:
+    image: redis:6.2
+    restart: always
+    container_name: redis # redis 容器的名称
+    ports:
+      - "6379:6379"
+    volumes:
+      - $PWD/redis/data/:/data
+      - $PWD/redis/redis.conf:/usr/local/etc/redis/redis.conf # redis.conf https://redis.io/topics/config
+    command:
+      /bin/bash -c "redis-server /usr/local/etc/redis/redis.conf "
+  rabbitmq:
+    image: rabbitmq
+    restart: always
+    container_name: rabbitmq #mysql 容器
+    ports:
+      - "15672:15672"
+      - "5672:5672"
