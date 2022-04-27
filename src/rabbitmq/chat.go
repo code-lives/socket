@@ -51,6 +51,7 @@ func ChatConsume() {
 			}
 			err = mysql.GetDB().Create(message).Error
 			if err != nil {
+				Queue("chat", string(d.Body)) //失败继续写入队列
 				fmt.Println("写入数据库失败", err)
 			}
 			fmt.Println("数据库存入成功")
