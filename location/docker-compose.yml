@@ -24,7 +24,7 @@ services:
     command:
       /bin/bash -c "redis-server /usr/local/etc/redis/redis.conf "
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:3.7.7-management
     restart: always
     container_name: rabbitmq #mysql 容器
     ports:
